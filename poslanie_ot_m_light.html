@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#dcd7f2">
+<title>Послание от М. ♡</title>
+<style>
+  * { box-sizing: border-box; }
+  html { min-height: 100%; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    padding: 24px 16px;
+    overflow-x: hidden;
+    color: #514875;
+    background:
+      radial-gradient(ellipse at 12% 12%, rgba(184,165,222,.72), transparent 42%),
+      radial-gradient(ellipse at 88% 18%, rgba(163,196,229,.72), transparent 42%),
+      radial-gradient(ellipse at 78% 90%, rgba(198,180,224,.7), transparent 43%),
+      radial-gradient(ellipse at 15% 85%, rgba(176,205,230,.65), transparent 42%),
+      #f0edfa;
+    font-family: Georgia, "Times New Roman", serif;
+  }
+  .card {
+    width: min(100%, 540px);
+    padding: clamp(32px, 7vw, 58px) clamp(20px, 6vw, 42px);
+    text-align: center;
+    border: 1px solid rgba(255,255,255,.8);
+    border-radius: 28px;
+    background: rgba(255,255,255,.48);
+    box-shadow: 0 12px 36px rgba(88,75,130,.12);
+  }
+  .eyebrow {
+    margin-bottom: 16px;
+    color: #887ba9;
+    font: 11px/1.5 Arial, sans-serif;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  h1 {
+    margin: 0 0 14px;
+    color: #65558f;
+    font-size: clamp(42px, 10vw, 62px);
+    font-weight: 500;
+  }
+  .intro {
+    margin: 0 auto 30px;
+    color: #81769f;
+    font: 14px/1.8 Arial, sans-serif;
+  }
+  button {
+    min-height: 54px;
+    padding: 15px 27px;
+    border: 0;
+    border-radius: 999px;
+    color: #fff;
+    background: linear-gradient(115deg, #9581c2, #789bc9);
+    box-shadow: 0 6px 18px rgba(105,91,155,.2);
+    font: 14px Arial, sans-serif;
+    cursor: pointer;
+    transition: transform .18s ease, box-shadow .18s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button:hover { transform: translateY(-2px); box-shadow: 0 9px 22px rgba(105,91,155,.25); }
+  button:active { transform: scale(.98); }
+  button:focus-visible { outline: 3px solid #7968a8; outline-offset: 4px; }
+  .message {
+    min-height: 126px;
+    display: grid;
+    place-items: center;
+    margin-top: 24px;
+    padding: 12px 4px;
+    color: #66558e;
+    font-size: clamp(24px, 5.5vw, 32px);
+    line-height: 1.35;
+    opacity: 1;
+  }
+  .message.pop { animation: appear .35s ease both; }
+  @keyframes appear {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .signature {
+    margin-top: 12px;
+    color: #9b90b5;
+    font: 11px Arial, sans-serif;
+    letter-spacing: 2px;
+  }
+  .sparkle {
+    position: fixed;
+    color: rgba(112,96,157,.48);
+    font-size: 22px;
+    pointer-events: none;
+  }
+  .s1 { top: 12%; left: 9%; }
+  .s2 { right: 10%; bottom: 14%; }
+  .s3 { top: 17%; right: 15%; font-size: 16px; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+  <span class="sparkle s1" aria-hidden="true">♡</span>
+  <span class="sparkle s2" aria-hidden="true">♡</span>
+  <span class="sparkle s3" aria-hidden="true">✧</span>
+
+  <main class="card">
+    <div class="eyebrow">a little something for you</div>
+    <h1>Для Даши</h1>
+    <p class="intro">Здесь спрятано кое-что особенное.<br>И каждое послание — от одного человека.</p>
+    <button id="messageButton" type="button">✧ Послание от М. ✧</button>
+    <div class="message" id="message" aria-live="polite">
+      Нажми на кнопку, и я кое-что тебе скажу...
+    </div>
+    <div class="signature">С ТЕПЛОМ, ОТ М. ♡</div>
+  </main>
+
+<script>
+(() => {
+  "use strict";
+
+  // 40 вариантов первой части × 25 окончаний = 1000 сочетаний.
+  const qualities = [
+    "невероятно красивая", "самое нежное чудо", "умопомрачительно прекрасная",
+    "удивительная", "очаровательная", "вдохновляющая", "неповторимая",
+    "волшебная", "невероятно милая", "как произведение искусства",
+    "редкая жемчужина", "сияющая ярче звёзд", "просто космос",
+    "удивительно талантливая", "нежность в человеческом обличье",
+    "достойная всего самого прекрасного", "сказочная", "самая чудесная",
+    "прекрасная даже в мелочах", "обладательница самой красивой улыбки",
+    "маленькое чудо в огромном мире", "настоящая драгоценность",
+    "прекраснее любого заката", "очень светлая и добрая",
+    "невероятно обаятельная", "сильная и нежная одновременно",
+    "словно лучик солнца", "самая уютная мысль", "красивая до мурашек",
+    "та, кем невозможно не восхищаться", "настоящая магия",
+    "невероятно искренняя", "редкое сочетание красоты и ума",
+    "такая одна на целую вселенную", "удивительно душевная",
+    "словно любимая мелодия", "полная света и тепла",
+    "прекрасная без всяких усилий", "человек с удивительной душой",
+    "моя любимая причина улыбаться"
+  ];
+
+  const endings = [
+    "и я надеюсь, что ты никогда этого не забудешь.",
+    "и мир становится лучше просто от того, что ты в нём есть.",
+    "и тебе даже не нужно стараться, чтобы быть особенной.",
+    "и никакие слова не смогут описать, насколько сильно.",
+    "и я бы хотел, чтобы ты увидела себя моими глазами.",
+    "и даже звёзды немного завидуют твоему сиянию.",
+    "и рядом с тобой обычные моменты становятся волшебными.",
+    "и ты заслуживаешь напоминаний об этом каждый день.",
+    "и это одна из самых прекрасных вещей на свете.",
+    "и я искренне восхищаюсь тобой.",
+    "и никакая фотография не передаст всей твоей красоты.",
+    "и у тебя есть удивительный талант делать мир теплее.",
+    "и ты гораздо прекраснее, чем сама думаешь.",
+    "и мне хочется, чтобы ты чаще улыбалась.",
+    "и это не комплимент, а чистая правда.",
+    "и я никогда не устану это повторять.",
+    "и в тебе есть что-то совершенно неповторимое.",
+    "и даже луна бледнеет рядом с тобой.",
+    "и ты достойна самой красивой истории.",
+    "и я надеюсь, что сегодня ты будешь счастлива.",
+    "и твоя улыбка способна изменить чей-то день.",
+    "и с тобой даже тишина становится уютной.",
+    "и в тебе удивительно красиво сочетаются доброта и сила.",
+    "и ты оставляешь после себя только тепло.",
+    "и мне хочется, чтобы ты всегда помнила, какая ты чудесная."
+  ];
+
+  const button = document.getElementById("messageButton");
+  const message = document.getElementById("message");
+  let previousIndex = -1;
+
+  button.addEventListener("click", () => {
+    let index;
+    do {
+      index = Math.floor(Math.random() * 1000);
+    } while (index === previousIndex);
+    previousIndex = index;
+
+    const qualityIndex = Math.floor(index / endings.length);
+    const endingIndex = index % endings.length;
+    const phrase = `Даша, ты ${qualities[qualityIndex]}, ${endings[endingIndex]}`;
+
+    message.classList.remove("pop");
+    // Перезапуск короткой анимации без таймеров и фоновых циклов.
+    void message.offsetWidth;
+    message.textContent = phrase;
+    message.classList.add("pop");
+  });
+})();
+</script>
+</body>
+</html>
